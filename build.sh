@@ -184,8 +184,10 @@ echo "==> Build $APP_SHORT_NAME AppImage"
 wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
 chmod +x *.AppImage
 
+APP_NAME_NO_SPACES=${APP_SHORT_NAME// /_}
+
 if [ "$GITHUB_RUNNING_ACTION" == true ]; then
-  ARCH=x86_64 ./appimagetool-x86_64.AppImage --comp gzip "$APP_DIRECTORY" -n -u "gh-releases-zsync|$GH_USER|$GH_REPO|latest|$APP_SHORT_NAME*.AppImage.zsync"
+  ARCH=x86_64 ./appimagetool-x86_64.AppImage --comp gzip "$APP_DIRECTORY" -n -u "gh-releases-zsync|$GH_USER|$GH_REPO|latest|$APP_NAME_NO_SPACES*.AppImage.zsync"
   echo "APP_NAME=$APP_NAME" >> "$GITHUB_ENV"
   echo "APP_SHORT_NAME=$APP_SHORT_NAME" >> "$GITHUB_ENV"
   echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
@@ -194,4 +196,4 @@ else
 fi
 
 mkdir dist
-mv "${APP_SHORT_NAME// /_}"*.AppImage* dist/.
+mv "$APP_NAME_NO_SPACES"*.AppImage* dist/.
